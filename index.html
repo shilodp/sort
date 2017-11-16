@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>BubbleSort</title>
+    <title>VisualSort</title>
     <style>
         body{
             display: flex;
@@ -121,7 +121,12 @@
             }
 
             function speed(items) {
-                return (10000 / (items.length))
+                if (10000 / (items.length)>250) {
+                    return (2000 / (items.length))
+                } else {
+                    return (10000 / (items.length))
+                }
+
             }}//Var
 
     function main () {
