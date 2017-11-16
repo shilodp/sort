@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>BubbleSort</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+        .start{
+            height: 40px;
+            width: 100%;
+        }
+        .result{
+            width: 50%;
+        }
+        .result p{
+            display: flex;
+            flex-direction: row;
+        }
+        span{
+            display: flex;
+            width: 105px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="start">
+    Initial Array: <input id = "initial" size="100" type = "text" value = "-10 10 -9 9 -8 8 -7 7 -6 6 -5 5 -4 4 -3 3 -2 2 -1 1 -0">
+    <button style="width:70px" id = "sort" onclick = "main()">Sort</button>
+    </div>
+
+    <div class="result">
+    <canvas id="BubbleCanvas" height="0" class="Canvas"></canvas>
+    <p><span>Bubble result: </span><input id = "BubbleFinal" type = "text" name = "final" readonly size = "50"> Steps: <input id = "BubbleSteps" type = "text" name = "final" readonly size = "5"></p>
+    </div>
+
+    <div class="result">
+    <canvas id="InsertionCanvas" height="0" class="Canvas"></canvas>
+    <p><span>Insertion result: </span><input id = "InsertionFinal" type = "text" name = "final" readonly size = "50"> Steps: <input id = "InsertionSteps" type = "text" name = "final" readonly size = "5"></p>
+    </div>
+
+    <div class="result">
+        <canvas id="SelectCanvas" height="0" class="Canvas"></canvas>
+        <p><span>Select result: </span><input id = "SelectFinal" type = "text" name = "final" readonly size = "50"> Steps: <input id = "SelectSteps" type = "text" name = "final" readonly size = "5"></p>
+    </div>
+
+    <div class="result">
+    <canvas id="ShellCanvas" height="0" class="Canvas"></canvas>
+    <p><span>Shell result: </span><input id = "ShellFinal" type = "text" name = "final" readonly size = "50"> Steps: <input id = "ShellSteps" type = "text" name = "final" readonly size = "5"></p>
+    </div>
+
+    <div class="result">
+    <canvas id="QuickCanvas" height="0" class="Canvas"></canvas>
+    <p><span>Quick result: </span><input id = "QuickFinal" type = "text" name = "final" readonly size = "50"> Steps: <input id = "QuickSteps" type = "text" name = "final" readonly size = "5"></p>
+    </div>
+
+    <div class="result">
+    <canvas id="MergeCanvas" height="0" class="Canvas"></canvas>
+    <p><span>Merge result: </span><input id = "MergeFinal" type = "text" name = "final" readonly size = "50"> Steps: <input id = "MergeSteps" type = "text" name = "final" readonly size = "5"></p>
+    </div>
+
+
+    <script>
+
+        {
+            var min;
+            var max;
+            var BubbleCounter = 0;
+            var SelectCounter = 0;
+            var InsertionCounter = 0;
+            var ShellCounter = 0;
+            var QuickCounter = 0;
+            var MergeCounter = 0;
+            var Array1 = [];
+            var Array2 = [];
+            var Array3 = [];
+            var Array4 = [];
+            var Array5 = [];
+            var Array6 = [];
+            var Array7 = [];
+            var finalArray;
+
+            function maxSearch(items, max) {
+                max = items[0];
+                for (var l = 0; l < items.length; l++) {
+                    if (items[l] > max) {
+                        max = items[l];
+                    }
+                }
+                return max;
+            }
+
+            function minSearch(items, min) {
+                min = items[0];
+                for (var k = 0; k < items.length; k++) {
+                    if (items[k] < min) {
+                        min = items[k];
+                    }
+                }
+                return min;
+            }
+
+            function CanvasSize(n, max, min) {
+                document.getElementById('BubbleCanvas').height = ((max - min) * 5 + 6);
+                document.getElementById('SelectCanvas').height = ((max - min) * 5 + 6);
+                document.getElementById('InsertionCanvas').height = ((max - min) * 5 + 6);
+                document.getElementById('ShellCanvas').height = ((max - min) * 5 + 6);
+                document.getElementById('QuickCanvas').height = ((max - min) * 5 + 6);
+                document.getElementById('MergeCanvas').height = ((max - min) * 5 + 6);
+                document.getElementById('BubbleCanvas').width = n * 5+1;
+                document.getElementById('SelectCanvas').width = n * 5+1;
+                document.getElementById('InsertionCanvas').width = n * 5+1;
+                document.getElementById('ShellCanvas').width = n * 5+1;
+                document.getElementById('QuickCanvas').width = n * 5+1;
+                document.getElementById('MergeCanvas').width = n * 5+1
+            }
+
+            function speed(items) {
+                return (10000 / (items.length))
+            }}//Var
+
+    function main () {
+
+        {Array1=document.getElementById('initial').value;
+        Array1 = Array1.split(' ');
+        for (var h = 0; h < Array1.length; h++) {
+            Array1[h] = +Array1[h];
+            if (isNaN(Array1[h])){
+                Array1.splice(h,1)
+            }
+        }
+        max=maxSearch(Array1,max);
+        min=minSearch(Array1,min);
+        CanvasSize(Array1.length,max,min);}//Prepare
+
+        {var startArray1 = document.getElementById('initial').value;
+        startArray1 = startArray1.split(' ');
+        for (var i = 0; i < startArray1.length; i++) {
+            startArray1[i] = +startArray1[i];
+            if (isNaN(startArray1[i])){
+                startArray1.splice(i,1)
+            }
+        }
+        var BubbleArray = startArray1;
+        Array2[0] = startArray1;
+        finalArray = BubbleSort(BubbleArray);
+        document.getElementById('BubbleFinal').value = finalArray;
+        document.getElementById('BubbleSteps').value = BubbleCounter;
+        for (var q = 0; q < Array2.length; q++) {
+            setTimeout(Display.bind(this, Array2[q],"BubbleCanvas"), speed(Array2) * q)
+        }} //Start Bubble
+
+        {var startArray3 = document.getElementById('initial').value;
+        startArray3 = startArray3.split(' ');
+        for (var t = 0; t < startArray3.length; t++) {
+            startArray3[t] = +startArray3[t];
+            if (isNaN(startArray3[t])){
+                startArray3.splice(t,1)
+            }
+        }
+        Array4[0] = startArray3;
+        var InsertionArray = startArray3;
+        finalArray = InsertionSort(InsertionArray);
+        document.getElementById('InsertionFinal').value = finalArray;
+        document.getElementById('InsertionSteps').value = InsertionCounter;
+        for (var y = 0; y < Array4.length; y++) {
+            setTimeout(Display.bind(this, Array4[y],"InsertionCanvas"), speed(Array4) * y)
+        }} //Start Insertion
+
+        {var startArray2 = document.getElementById('initial').value;
+            startArray2 = startArray2.split(' ');
+            for (var r = 0; r < startArray2.length; r++) {
+                startArray2[r] = +startArray2[r];
+                if (isNaN(startArray2[r])){
+                    startArray2.splice(r,1)
+                }
+            }
+            Array3[0] = startArray2;
+            var SelectArray = startArray2;
+            finalArray = SelectSort(SelectArray);
+            document.getElementById('SelectFinal').value = finalArray;
+            document.getElementById('SelectSteps').value = SelectCounter;
+            for (var e = 0; e < Array3.length; e++) {
+                setTimeout(Display.bind(this, Array3[e],"SelectCanvas"), speed(Array3)*e)
+            }} //Start Select
+
+        {var startArray4 = document.getElementById('initial').value;
+        startArray4 = startArray4.split(' ');
+        for (var u = 0; u < startArray4.length; u++) {
+            startArray4[u] = +startArray4[u];
+            if (isNaN(startArray4[u])){
+                startArray4.splice(u,1)
+            }
+        }
+        Array5[0] = startArray4;
+        var ShellArray = startArray4;
+        finalArray = ShellSort(ShellArray);
+        document.getElementById('ShellFinal').value = finalArray;
+        document.getElementById('ShellSteps').value = ShellCounter;
+        for (var o = 0; o < Array5.length; o++) {
+            setTimeout(Display.bind(this, Array5[o],"ShellCanvas"), speed(Array5) * o)
+        }} //Start Shell
+
+        {var startArray5 = document.getElementById('initial').value;
+        startArray5 = startArray5.split(' ');
+        for (var p = 0; p < startArray5.length; p++) {
+            startArray5[p] = +startArray5[p];
+            if (isNaN(startArray5[p])){
+                startArray5.splice(p,1)
+            }
+        }
+        Array6[0] = startArray5;
+        var QuickArray = startArray5;
+        finalArray = QuickSort(QuickArray,0,QuickArray.length-1);
+        document.getElementById('QuickFinal').value = finalArray;
+        document.getElementById('QuickSteps').value = QuickCounter;
+        for (var a = 0; a < Array6.length; a++) {
+            setTimeout(Display.bind(this, Array6[a],"QuickCanvas"), speed(Array6) * a)
+        }} //Start Quick
+
+        {var startArray6 = document.getElementById('initial').value;
+        startArray6 = startArray6.split(' ');
+        for (var s = 0; s < startArray6.length; s++) {
+            startArray6[s] = +startArray6[s];
+            if (isNaN(startArray6[s])){
+                startArray6.splice(s,1)
+            }
+        }
+        Array7[0] = startArray6;
+        var MergeArray = startArray6;
+        finalArray = MergeSort(MergeArray, Array7);
+        document.getElementById('MergeFinal').value = finalArray;
+        document.getElementById('MergeSteps').value = MergeCounter;
+        for (var d = 0; d < Array7.length; d++) {
+                setTimeout(Display.bind(this, Array7[d],"MergeCanvas"), 250 * d)
+            }} //Start Merge
+
+        {
+        Array1=[];
+        Array2=[];
+        Array3=[];
+        Array4=[];
+        Array5=[];
+        Array6=[];
+        Array7=[];
+        BubbleCounter=0;
+        SelectCounter=0;
+        InsertionCounter=0;
+        ShellCounter=0;
+        QuickCounter=0;
+        MergeCounter=0;}//Cleaning
+    }
+
+	function BubbleSort (items) {
+	    var n = items.length;
+        var z=1;
+        for (i = 0; i < n - 1; i++) {
+            for (var j = 0; j < n - 1 - i; j++) {
+                if (items[j + 1] < items[j]) {
+                    var t = items[j + 1];
+                    items[j + 1] = items[j];
+                    items[j] = t;
+                    BubbleCounter++;
+                    for (var w=0; w<z;w++) {
+                        Array2[z]=[];
+                        for (var m=0; m<items.length;m++)
+                            Array2[z][m]=items[m];
+                    }
+                    z++;
+                }
+            }
+
+        }
+        return items;
+    }
+
+    function InsertionSort(items) {
+        var n = items.length;
+        var z=1;
+        for (var i = 0; i < n; i++){
+            var v = items[i],
+                j = i-1;
+            while (j >= 0 && items[j] > v) {
+                items[j+1] = items[j];
+                j--;
+                InsertionCounter++;
+                for (var w=0; w<z;w++) {
+                    Array4[z]=[];
+                    for (var m=0; m<items.length;m++)
+                        Array4[z][m]=items[m];
+                }
+                z++;
+            }
+            items[j+1] = v;
+            for (w=0; w<z;w++) {
+                Array4[z]=[];
+                for (m=0; m<items.length;m++)
+                    Array4[z][m]=items[m];
+            }
+            z++;
+        }
+        return items;
+    }
+
+    function SelectSort(items) {
+            var n = items.length;
+            var z=1;
+            for (var i = 0; i < n-1; i++) {
+                var min = i;
+                for (var j = i+1; j < n; j++) {
+                    if (items[j] < items[min]) {
+                        min = j;
+                        SelectCounter++;
+                        for (var w=0; w<z;w++) {
+                            Array3[z]=[];
+                            for (var m=0; m<items.length;m++)
+                                Array3[z][m]=items[m];
+                        }
+                        z++;
+                    }
+                }
+                var t = items[min];
+                items[min] = items[i];
+                items[i] = t;
+            }
+            for (w=0; w<z;w++) {
+                Array3[z]=[];
+                for (m=0; m<items.length;m++)
+                    Array3[z][m]=items[m];
+            }
+            return items;
+        }
+
+    function ShellSort(items) {
+        var z=1;
+        var n = items.length,
+            i = Math.floor(n/2);
+        while (i > 0) {
+            for (var j = 0; j < n; j++) {
+                var k = j,
+                    t = items[j];
+                while (k >= i && items[k-i] > t) {
+                    items[k] = items[k-i];
+                    k -= i;
+                    for (var w=0; w<z;w++) {
+                        Array5[z]=[];
+                        for (var m=0; m<items.length;m++)
+                            Array5[z][m]=items[m];
+                    }
+                    z++;
+                    ShellCounter++;
+                }
+                items[k] = t;
+            }
+            i = (i==2) ? 1 : Math.floor(i*5/11);
+            for (w=0; w<z;w++) {
+                Array5[z]=[];
+                for (m=0; m<items.length;m++)
+                    Array5[z][m]=items[m];
+            }
+            z++;
+        }
+        return items;
+    }
+
+    function QuickSort(items, left, right) {
+        var index;
+        if (items.length > 1) {
+            index = check(items, left, right);
+            if (left < index - 1) {
+                QuickSort(items, left, index - 1);
+            }
+            if (index < right) {
+                QuickSort(items, index, right);
+            }
+        }
+        return items;
+
+        function check(items, left, right) {
+            var mid=items[Math.floor((right+left)/2)];
+            while (left <= right) {
+                while (items[left] < mid) {
+                    left++;
+                }
+                while (items[right] > mid) {
+                    right--;
+                }
+                if (left <= right) {
+                    change(items, left, right);
+                    left++;
+                    right--;
+                }
+            }
+            return left;
+        }
+
+        function change(items, first, second){
+            var t = items[first];
+            items[first] = items[second];
+            items[second] = t;
+            QuickCounter++;
+            Array6[QuickCounter]=[];
+            for (var m=0; m<items.length;m++) {
+                (Array6[QuickCounter][m])=items[m];
+            }
+        }
+    }
+
+    function MergeSort(items) {
+        var n = items.length;
+        if (n < 2)
+            return items;
+        var mid = Math.floor(n / 2),
+            left = items.slice(0, mid),
+            right = items.slice(mid);
+        return Merge(MergeSort(left), MergeSort(right));
+
+        function Merge(left,right) {
+            var result = [],
+                l = 0,
+                r = 0;
+            while (l < left.length && r < right.length) {
+                if (+left[l] < +right[r]) {
+                    result.push(left[l++]);
+                } else {
+                    result.push(right[r++]);
+                }
+            }
+            MergeCounter++;
+            return result.concat(left.slice(l)).concat(right.slice(r));
+        }
+    }
+
+	function Display(items,ID) {
+        var canvas = document.getElementById(ID);
+        var ctx= canvas.getContext("2d");
+        ctx.clearRect(0,0,4000,4000);
+        for (var x = 0.5; x < 4000; x += 5) {
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, 4000);
+        }
+        for (var y = 0.5; y < 400; y += 5) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(4000, y);
+        }
+        ctx.strokeStyle = "grey";
+        ctx.stroke();
+        for (var i=0; i<items.length; i++) {
+            if (min<0) {
+                ctx.fillRect(i*5, (items[i]*5)+Math.abs(min)*5, 5, 5)
+
+            } else {
+                ctx.fillRect(i*5, (items[i]*5)-min*5, 5, 5)
+            }
+        }
+    }
+
+    </script>
+
+</body>
+
+</html>
