@@ -10,7 +10,7 @@
             flex-wrap: wrap;
         }
         .start{
-            height: 40px;
+            min-height: 40px;
             width: 100%;
         }
         .result{
@@ -24,6 +24,10 @@
             display: flex;
             width: 105px;
         }
+		.Canvas{
+			margin-top:5px;
+			transform: scale(1,-1);
+		}
     </style>
 </head>
 
@@ -32,6 +36,9 @@
     <div class="start">
     Initial Array: <input id = "initial" size="100" type = "text" value = "-10 10 -9 9 -8 8 -7 7 -6 6 -5 5 -4 4 -3 3 -2 2 -1 1 -0">
     <button style="width:70px" id = "sort" onclick = "main()">Sort</button>
+	<br>
+    <canvas id="FirstCanvas" height="0" class="Canvas"></canvas>
+	<hr>
     </div>
 
     <div class="result">
@@ -57,11 +64,6 @@
     <div class="result">
     <canvas id="QuickCanvas" height="0" class="Canvas"></canvas>
     <p><span>Quick result: </span><input id = "QuickFinal" type = "text" name = "final" readonly size = "50"> Steps: <input id = "QuickSteps" type = "text" name = "final" readonly size = "5"></p>
-    </div>
-
-    <div class="result">
-    <canvas id="MergeCanvas" height="0" class="Canvas"></canvas>
-    <p><span>Merge result: </span><input id = "MergeFinal" type = "text" name = "final" readonly size = "50"> Steps: <input id = "MergeSteps" type = "text" name = "final" readonly size = "5"></p>
     </div>
 
 
@@ -106,18 +108,18 @@
             }
 
             function CanvasSize(n, max, min) {
+                document.getElementById('FirstCanvas').height = ((max - min) * 5 + 6);
                 document.getElementById('BubbleCanvas').height = ((max - min) * 5 + 6);
                 document.getElementById('SelectCanvas').height = ((max - min) * 5 + 6);
                 document.getElementById('InsertionCanvas').height = ((max - min) * 5 + 6);
                 document.getElementById('ShellCanvas').height = ((max - min) * 5 + 6);
                 document.getElementById('QuickCanvas').height = ((max - min) * 5 + 6);
-                document.getElementById('MergeCanvas').height = ((max - min) * 5 + 6);
+                document.getElementById('FirstCanvas').width = n * 5+1;
                 document.getElementById('BubbleCanvas').width = n * 5+1;
                 document.getElementById('SelectCanvas').width = n * 5+1;
                 document.getElementById('InsertionCanvas').width = n * 5+1;
                 document.getElementById('ShellCanvas').width = n * 5+1;
-                document.getElementById('QuickCanvas').width = n * 5+1;
-                document.getElementById('MergeCanvas').width = n * 5+1
+                document.getElementById('QuickCanvas').width = n * 5+1
             }
 
             function speed(items) {
@@ -141,7 +143,8 @@
         }
         max=maxSearch(Array1,max);
         min=minSearch(Array1,min);
-        CanvasSize(Array1.length,max,min);}//Prepare
+        CanvasSize(Array1.length,max,min);
+		Display(Array1,"FirstCanvas");}//Prepare
 
         {var startArray1 = document.getElementById('initial').value;
         startArray1 = startArray1.split(' ');
@@ -227,23 +230,6 @@
         for (var a = 0; a < Array6.length; a++) {
             setTimeout(Display.bind(this, Array6[a],"QuickCanvas"), speed(Array6) * a)
         }} //Start Quick
-
-        {var startArray6 = document.getElementById('initial').value;
-        startArray6 = startArray6.split(' ');
-        for (var s = 0; s < startArray6.length; s++) {
-            startArray6[s] = +startArray6[s];
-            if (isNaN(startArray6[s])){
-                startArray6.splice(s,1)
-            }
-        }
-        Array7[0] = startArray6;
-        var MergeArray = startArray6;
-        finalArray = MergeSort(MergeArray, Array7);
-        document.getElementById('MergeFinal').value = finalArray;
-        document.getElementById('MergeSteps').value = MergeCounter;
-        for (var d = 0; d < Array7.length; d++) {
-                setTimeout(Display.bind(this, Array7[d],"MergeCanvas"), 250 * d)
-            }} //Start Merge
 
         {
         Array1=[];
@@ -416,31 +402,6 @@
         }
     }
 
-    function MergeSort(items) {
-        var n = items.length;
-        if (n < 2)
-            return items;
-        var mid = Math.floor(n / 2),
-            left = items.slice(0, mid),
-            right = items.slice(mid);
-        return Merge(MergeSort(left), MergeSort(right));
-
-        function Merge(left,right) {
-            var result = [],
-                l = 0,
-                r = 0;
-            while (l < left.length && r < right.length) {
-                if (+left[l] < +right[r]) {
-                    result.push(left[l++]);
-                } else {
-                    result.push(right[r++]);
-                }
-            }
-            MergeCounter++;
-            return result.concat(left.slice(l)).concat(right.slice(r));
-        }
-    }
-
 	function Display(items,ID) {
         var canvas = document.getElementById(ID);
         var ctx= canvas.getContext("2d");
@@ -455,6 +416,16 @@
         }
         ctx.strokeStyle = "grey";
         ctx.stroke();
+		if (min<0) {
+			ctx.beginPath();
+			ctx.moveTo(0,Math.abs(min)*5+0.5);
+			ctx.lineTo(4000, Math.abs(min)*5+0.5);
+			ctx.lineWidth = 1.5;
+			ctx.strokeStyle = "red";
+			ctx.stroke();
+			
+			ctx.lineWidth = 1;
+		}
         for (var i=0; i<items.length; i++) {
             if (min<0) {
                 ctx.fillRect(i*5, (items[i]*5)+Math.abs(min)*5, 5, 5)
