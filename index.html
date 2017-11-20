@@ -147,6 +147,9 @@
         max=maxSearch(Array1,max);
         min=minSearch(Array1,min);
         CanvasSize(Array1.length,max,min);
+		if (document.getElementById("FirstCanvas").offsetWidth>document.body.clientWidth/2) {
+		    document.body.style.flexDirection="column";
+        }
 		Display(Array1,"FirstCanvas");}//Prepare
 
         {var startArray1 = document.getElementById('initial').value;
@@ -425,6 +428,7 @@
 			ctx.lineTo(4000, Math.abs(min)*5+2.5);
 			ctx.strokeStyle = "red";
 			ctx.stroke();
+			ctx.closePath();
 		}
         for (var i=0; i<items.length; i++) {
 
